@@ -101,6 +101,7 @@
     .card-stripe.muted { background: linear-gradient(90deg, var(--muted), #3a5f80); }
     .card-stripe.red { background: linear-gradient(90deg, #e04a2f, #a32b16); }
     .card-stripe.crimson { background: linear-gradient(90deg, #ff3b41, #9c161b); }
+    .card-stripe.blue { background: linear-gradient(90deg, #2f7bff, #1446b8); }
 
     .card-body {
       padding: 28px 28px 24px;
@@ -144,6 +145,13 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--gold);
+    }
+
+    .card-icon img {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      display: block;
     }
 
     .card-cta svg { flex-shrink: 0; }
@@ -191,6 +199,20 @@
 </header>
 
 <main>
+
+  <!-- Thunder U11A -->
+  <a class="card" href="https://www.youtube.com/playlist?list=PLe2h9_kT-UXw" target="_blank" rel="noopener">
+    <div class="card-stripe blue"></div>
+    <div class="card-body">
+      <div class="card-icon"><img src="thunder-logo.jpg" alt="Thunder U11A logo" /></div>
+      <div class="card-title">Thunder U11A</div>
+      <div class="card-desc">Game recordings and livestreams on YouTube.</div>
+      <div class="card-cta">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        Watch Games
+      </div>
+    </div>
+  </a>
 
   <!-- SJ Snipers -->
   <a class="card" href="https://snipers.traceyfamily.ca/" target="_blank" rel="noopener">
