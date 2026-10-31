@@ -119,4 +119,4 @@ body:
     id: tips
     attributes:
       label: Tips
-      description: Anything that would help the next parent. You can attach photos here too.
+      description: Anything that would help the next parent. It's shown with your GitHub name and the date. You can attach photos here too.

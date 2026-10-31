@@ -19,6 +19,7 @@ PHOTOS = 'arenas/photos'
 TEMPLATE = 'arenas/_includes/arena-template.md'
 TRUSTED = {'OWNER', 'MEMBER', 'COLLABORATOR'}
 MAX_PHOTO = 15 * 1024 * 1024
+MONCTON = ZoneInfo('America/Moncton')
 
 RECEPTION = {'Good': 'Good', 'OK': 'OK', 'Poor': 'Poor', 'No signal': 'None', 'Unknown': 'Unknown'}
 YES_NO = {'Yes': 'Yes', 'No': 'No', 'Unknown': 'Unknown'}
@@ -86,8 +87,22 @@ def slugify(text):
     return re.sub(r'[^a-z0-9]+', '-', text.lower()).strip('-')
 
 
-def today():
-    return datetime.now(ZoneInfo('America/Moncton')).strftime('%Y-%m-%d')
+def sent_on(issue):
+    """The day the form was sent, which may be before a maintainer approved it."""
+    return datetime.fromisoformat(issue['created_at'].replace('Z', '+00:00')).astimezone(MONCTON)
+
+
+def credit(issue):
+    """An 'Added by Name · Oct 31, 2026' line to head the tips someone added."""
+    login = issue['user']['login']
+    try:
+        name = json.loads(api('GET', f'/users/{login}')).get('name') or ''
+    except (OSError, ValueError):
+        name = ''
+    # Profile names are free text; keep them from turning into Markdown or HTML.
+    name = ' '.join(re.sub(r'[<>\[\]*_`#{}|\\]', '', name).split())[:60] or login
+    day = sent_on(issue)
+    return f'Added by {name} · {day:%b} {day.day}, {day.year}\n{{: .tip-by}}'
 
 
 def split_page(text):
@@ -180,7 +195,8 @@ def save_photos(tips, slug, number):
     return tips, saved
 
 
-def update_arena(answers, number):
+def update_arena(answers, issue):
+    number = issue['number']
     slug = answers.get('Arena', '').strip().lower()
     path = f'{RINKS}/{slug}.md'
     if not re.fullmatch(r'[a-z0-9-]+', slug) or not os.path.isfile(path):
@@ -191,16 +207,18 @@ def update_arena(answers, number):
     tips, photos = save_photos(answers.get('Tips to add', ''), slug, number)
     if not changed and not tips:
         return None
-    front = set_field(front, 'last_updated', today())
+    front = set_field(front, 'last_updated', f'{sent_on(issue):%Y-%m-%d}')
+    # New tips go below the old ones under a byline, rather than replacing anything.
     if tips:
-        body = body.strip() + '\n\n' + tips
+        body = body.strip() + '\n\n' + credit(issue) + '\n\n' + tips
     with open(path, 'w', encoding='utf-8') as f:
         f.write(join_page(front, body))
     name = get_field(front, 'name') or slug
     return f'Update {name} from #{number}', [path] + photos, slug, name, 'updated'
 
 
-def add_arena(answers, number):
+def add_arena(answers, issue):
+    number = issue['number']
     name = one_line(answers.get('Arena name', ''))
     slug = slugify(name)
     if not slug:
@@ -217,8 +235,10 @@ def add_arena(answers, number):
         if text:
             front = set_field(front, key, yaml_value(text))
     front, _ = apply_answers(front, answers)
-    front = set_field(front, 'last_updated', today())
+    front = set_field(front, 'last_updated', f'{sent_on(issue):%Y-%m-%d}')
     tips, photos = save_photos(answers.get('Tips', ''), slug, number)
+    if tips:
+        tips = credit(issue) + '\n\n' + tips
     with open(path, 'w', encoding='utf-8') as f:
         f.write(join_page(front, tips))
     return f'Add {name} from #{number}', [path] + photos, slug, name, 'added'
@@ -283,7 +303,7 @@ def main():
 
     answers = parse_form(issue.get('body'))
     try:
-        result = add_arena(answers, number) if 'Arena name' in answers else update_arena(answers, number)
+        result = add_arena(answers, issue) if 'Arena name' in answers else update_arena(answers, issue)
     except FormProblem as e:
         comment(number, f'{e}\n\nA maintainer can fix the form and add the `approved` label to try again.')
         return

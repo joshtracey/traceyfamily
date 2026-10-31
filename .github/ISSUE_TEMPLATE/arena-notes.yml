@@ -117,4 +117,4 @@ body:
     id: tips
     attributes:
       label: Tips to add
-      description: Anything that would help the next parent. It's added to the arena's tips. You can attach photos here too.
+      description: Anything that would help the next parent. It's added below the arena's existing tips with your GitHub name and the date. You can attach photos here too.

@@ -168,6 +168,16 @@
       border: 1px solid var(--card-border);
     }
     .prose blockquote { border-left: 3px solid var(--gold-dim); padding-left: 12px; color: var(--muted); }
+    /* Byline heading each set of tips added through the form */
+    .prose .tip-by {
+      margin-top: 1.6em;
+      padding-top: 12px;
+      border-top: 1px solid var(--card-border);
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .prose .tip-by:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+    .prose .tip-by + * { margin-top: 0.4em; }
 
     /* FOOTER */
     footer {
