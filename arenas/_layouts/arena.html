@@ -10,7 +10,6 @@ layout: arenas-base
 {%- assign eth_location = page.ethernet_location | append: "" | strip -%}
 {%- assign camera_spot = page.best_camera_spot | append: "" | strip -%}
 {%- include rink-status.html rink=page -%}
-{%- assign edit_url = rink_edit_url -%}
 {%- capture edit_icon %}<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>{% endcapture -%}
 
 <a class="back" href="/arenas/">&larr; All arenas</a>
@@ -22,7 +21,7 @@ layout: arenas-base
     <small>Last updated</small>
     <strong>{% if rink_updated == "" or rink_updated == "Unknown" %}<span class="unknown">Unknown</span>{% else %}{{ page.last_updated | date: "%b %-d, %Y" }}{% endif %}</strong>
   </div>
-  <a class="btn" href="{{ edit_url }}">{{ edit_icon }} Edit this page</a>
+  <a class="btn" href="{{ rink_notes_url }}">{{ edit_icon }} Add notes</a>
 </div>
 
 <div class="facts">
@@ -87,7 +86,7 @@ layout: arenas-base
 {%- assign tip_text = content | strip_html | strip -%}
 {%- if tip_text == "" and content contains "<img" -%}{%- assign tip_text = "photo" -%}{%- endif -%}
 {%- if tip_text == "" %}
-<p class="unknown">No tips yet. Know this rink? Tap Edit this page to add some.</p>
+<p class="unknown">No tips yet. Know this rink? Tap Add notes to add some.</p>
 {%- else %}
 <div class="prose">
 {{ content }}
@@ -95,6 +94,6 @@ layout: arenas-base
 {%- endif %}
 
 <div class="page-foot">
-  <a class="btn ghost" href="{{ edit_url }}">{{ edit_icon }} Edit this page</a>
-  <p>Editing needs a free GitHub account. Saved changes go live in a minute or two.</p>
+  <a class="btn ghost" href="{{ rink_notes_url }}">{{ edit_icon }} Add notes</a>
+  <p>Opens a short form on GitHub (free account needed). Change only what you know; your notes go live a few minutes after you submit. To reword or remove old tips, <a href="{{ rink_edit_url }}">edit the page file</a>.</p>
 </div>

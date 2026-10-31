@@ -1,0 +1,30 @@
+name: Arena updates
+
+# Applies the arena forms (.github/ISSUE_TEMPLATE) to the guide. Collaborators'
+# updates go straight in; anyone else's wait for the "approved" label.
+on:
+  issues:
+    types: [opened, labeled]
+
+permissions:
+  contents: write
+  issues: write
+  pages: write
+
+concurrency:
+  group: arena-updates
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    if: >-
+      github.event.issue.state == 'open' &&
+      contains(github.event.issue.labels.*.name, 'arena-update') &&
+      (github.event.action == 'opened' || github.event.label.name == 'approved')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Apply the form to the arena page
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 .github/scripts/arena_update.py

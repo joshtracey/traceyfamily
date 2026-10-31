@@ -1,0 +1,120 @@
+name: Add arena notes
+description: Share what works for streaming at a rink that's already in the Arena Streaming Guide.
+title: "Arena notes"
+labels: ["arena-update"]
+# The question labels below are read by .github/scripts/arena_update.py. Change them there too.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Answer only what you know. Anything left on **No change** stays as it is. Your notes go live a few minutes after you submit.
+  - type: input
+    id: arena
+    attributes:
+      label: Arena
+      description: Filled in from the arena's page. Please leave it as it is.
+    validations:
+      required: true
+  - type: dropdown
+    id: arena_stream
+    attributes:
+      label: Arena stream
+      description: Does the rink stream games itself?
+      options:
+        - No change
+        - LiveBarn
+        - Hudl
+        - Other
+        - No arena stream
+        - Unknown
+      default: 0
+  - type: input
+    id: arena_stream_link
+    attributes:
+      label: Arena stream link
+      description: Where to watch the rink's stream, if it has a link.
+  - type: dropdown
+    id: cell_bell_telus
+    attributes:
+      label: Bell / Telus cell
+      description: Includes Virgin and Koodo.
+      options:
+        - No change
+        - Good
+        - OK
+        - Poor
+        - No signal
+        - Unknown
+      default: 0
+  - type: dropdown
+    id: cell_rogers
+    attributes:
+      label: Rogers cell
+      description: Includes Fido and Chatr.
+      options:
+        - No change
+        - Good
+        - OK
+        - Poor
+        - No signal
+        - Unknown
+      default: 0
+  - type: dropdown
+    id: wifi
+    attributes:
+      label: WiFi
+      description: Is there WiFi you can use?
+      options:
+        - No change
+        - "Yes"
+        - "No"
+        - Unknown
+      default: 0
+  - type: dropdown
+    id: captive_portal
+    attributes:
+      label: WiFi welcome page
+      description: Do you have to tap through a welcome or accept page to get online?
+      options:
+        - No change
+        - "Yes"
+        - "No"
+        - No WiFi here
+        - Unknown
+      default: 0
+  - type: dropdown
+    id: blocks_streaming
+    attributes:
+      label: WiFi blocks streaming
+      description: Does the WiFi block or cut off video streams?
+      options:
+        - No change
+        - "Yes"
+        - "No"
+        - Partly
+        - Unknown
+      default: 0
+  - type: dropdown
+    id: ethernet
+    attributes:
+      label: Ethernet port
+      description: Is there a network port you can plug into?
+      options:
+        - No change
+        - "Yes"
+        - "No"
+        - Unknown
+      default: 0
+  - type: input
+    id: ethernet_location
+    attributes:
+      label: Where the Ethernet port is
+  - type: input
+    id: best_camera_spot
+    attributes:
+      label: Best camera spot
+  - type: textarea
+    id: tips
+    attributes:
+      label: Tips to add
+      description: Anything that would help the next parent. It's added to the arena's tips. You can attach photos here too.

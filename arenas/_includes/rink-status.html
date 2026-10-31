@@ -1,6 +1,7 @@
 {%- comment -%}
-  Works out two things about one rink (include.rink) and leaves them in
+  Works out a few things about one rink (include.rink) and leaves them in
   variables for the caller, since includes share the page's variables:
+    rink_notes_url - the Add notes form for the rink, with the rink filled in
     rink_edit_url  - GitHub editor link for the rink's file
     rink_has_notes - true once someone has filled in a streaming field or
                      written tips. Name, city, address and date don't count.
@@ -8,6 +9,9 @@
 {%- endcomment -%}
 {%- assign rink_source = include.rink.path | remove_first: "arenas/" -%}
 {%- capture rink_edit_url %}https://github.com/joshtracey/traceyfamily/edit/main/arenas/{{ rink_source }}{% endcapture -%}
+{%- assign rink_slug = rink_source | split: "/" | last | remove: ".md" -%}
+{%- capture rink_notes_title %}Arena notes: {{ include.rink.name | default: include.rink.title }}{% endcapture -%}
+{%- capture rink_notes_url %}https://github.com/joshtracey/traceyfamily/issues/new?template=arena-notes.yml&amp;title={{ rink_notes_title | url_encode | replace: '+', '%20' }}&amp;arena={{ rink_slug }}{% endcapture -%}
 {%- capture rink_notes -%}
   {{ include.rink.arena_stream }} {{ include.rink.arena_stream_link }}
   {{ include.rink.cell_bell_telus }} {{ include.rink.cell_rogers }}
