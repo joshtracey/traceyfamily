@@ -15,7 +15,7 @@ address:
 arena_stream: Other
 arena_stream_link: http://en.ezcloud.uniview.com/icecam
 cell_bell_telus: Poor
-cell_rogers: Poor
+cell_rogers: Unknown
 wifi: Yes
 captive_portal: No
 blocks_streaming: Unknown
@@ -25,7 +25,7 @@ best_camera_spot:
 last_updated: 2026-10-24
 ---
 
-Cell is terrible here. The WiFi is open with no captive portal, but it failed on 2026-10-24.
+Telus cell is terrible here. The WiFi is open with no captive portal, but it failed on 2026-10-24.
 
 **Arena stream:** the rink has its own fisheye ice cam at [en.ezcloud.uniview.com/icecam](http://en.ezcloud.uniview.com/icecam) ([more info](https://easterncharlotte.ca/residents/ecrc/)). The community publishes the login for public use:
 

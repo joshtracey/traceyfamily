@@ -9,13 +9,13 @@
 #   last_updated: the date you checked, YYYY-MM-DD
 # Tips go below the closing --- line. To add a photo, upload it to the
 # arenas folder (Add file > Upload files), then write ![what it shows](/arenas/photo.jpg)
-name: Moncton 4-Plex (Greenfoot)
+name: Greenfoot Energy 4-Plex
 city: Moncton
-address:
+address: 55 Russ Howard Dr
 arena_stream: Unknown
 arena_stream_link:
 cell_bell_telus: Good
-cell_rogers: Good
+cell_rogers: Unknown
 wifi: Yes
 captive_portal: Unknown
 blocks_streaming: Yes
@@ -25,6 +25,6 @@ best_camera_spot:
 last_updated: 2026-10-30
 ---
 
-The WiFi kicks video streams, so you need a VPN to stream over it.
+Telus cell is good. The WiFi kicks video streams, so you need a VPN to stream over it.
 
 The Ethernet in the Rink A broadcast booth works well.

@@ -15,7 +15,7 @@ address:
 arena_stream: Unknown
 arena_stream_link:
 cell_bell_telus: OK
-cell_rogers: OK
+cell_rogers: Unknown
 wifi: Yes
 captive_portal: Yes
 blocks_streaming: Unknown
@@ -25,4 +25,4 @@ best_camera_spot:
 last_updated: 2026-10-30
 ---
 
-Cell is decent.
+Telus cell is decent.

@@ -15,7 +15,7 @@ address:
 arena_stream: Unknown
 arena_stream_link:
 cell_bell_telus: None
-cell_rogers: None
+cell_rogers: Unknown
 wifi: Yes
 captive_portal: No
 blocks_streaming: Yes
@@ -25,7 +25,7 @@ best_camera_spot:
 last_updated: 2026-10-30
 ---
 
-Cell is terrible here, not functional.
+Telus cell is terrible here, not functional.
 
 The WiFi has no captive portal, but it blocks streaming: connections work for a second or two, then get kicked. Switching ports didn't help.
 

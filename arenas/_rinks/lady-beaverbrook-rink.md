@@ -15,7 +15,7 @@ address: 411 University Ave
 arena_stream: Unknown
 arena_stream_link:
 cell_bell_telus: Poor
-cell_rogers: Poor
+cell_rogers: Unknown
 wifi: Yes
 captive_portal: Yes
 blocks_streaming: Unknown
@@ -25,4 +25,4 @@ best_camera_spot:
 last_updated: 2026-10-30
 ---
 
-Cell is iffy. The Ethernet port works with a travel router.
+Telus cell is iffy. The Ethernet port works with a travel router.

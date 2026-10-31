@@ -9,13 +9,13 @@
 #   last_updated: the date you checked, YYYY-MM-DD
 # Tips go below the closing --- line. To add a photo, upload it to the
 # arenas folder (Add file > Upload files), then write ![what it shows](/arenas/photo.jpg)
-name: NH Cyclones Arena
-city:
-address:
+name: Cyclones Arena
+city: Hudson, NH
+address: 20 Constitution Dr
 arena_stream: Unknown
 arena_stream_link:
 cell_bell_telus: Poor
-cell_rogers: Poor
+cell_rogers: Unknown
 wifi: Yes
 captive_portal: Yes
 blocks_streaming: Unknown
@@ -25,6 +25,6 @@ best_camera_spot:
 last_updated: 2026-10-30
 ---
 
-Cell is weak: 1 bar of LTE.
+Telus cell is weak: 1 bar of LTE.
 
 The Cat6 port at Rink 2 centre ice works well with a travel router, no VPN needed.

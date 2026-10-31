@@ -11,7 +11,7 @@
 # arenas folder (Add file > Upload files), then write ![what it shows](/arenas/photo.jpg)
 name: Rothesay Netherwood School
 city: Rothesay
-address:
+address: 40 College Hill Rd
 arena_stream: Hudl
 arena_stream_link:
 cell_bell_telus: Unknown
@@ -25,4 +25,4 @@ best_camera_spot:
 last_updated: 2026-10-30
 ---
 
-RNS streams its own tournaments on Hudl.
+The rink is the Dr. C.H. Bonnycastle Memorial Arena on the RNS campus. RNS streams its own tournaments on Hudl.

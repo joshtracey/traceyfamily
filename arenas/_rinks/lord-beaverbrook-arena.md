@@ -25,4 +25,4 @@ best_camera_spot:
 last_updated: 2026-10-30
 ---
 
-If you need the WiFi password, please contact Josh Tracey, as it is not publicly released.
+WiFi password: `LBA$8540`
