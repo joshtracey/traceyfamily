@@ -1,0 +1,101 @@
+---
+layout: arenas-base
+---
+{%- assign rink_name = page.name | default: page.title -%}
+{%- assign rink_city = page.city | append: "" | strip -%}
+{%- assign rink_address = page.address | append: "" | strip -%}
+{%- assign rink_updated = page.last_updated | append: "" | strip -%}
+{%- assign stream_link = page.arena_stream_link | append: "" | strip -%}
+{%- assign stream_kind = page.arena_stream | append: "" | strip | downcase -%}
+{%- assign eth_location = page.ethernet_location | append: "" | strip -%}
+{%- assign camera_spot = page.best_camera_spot | append: "" | strip -%}
+{%- comment -%} Jekyll 3 leaves collections_dir off page.path for collection files, so add it back. {%- endcomment -%}
+{%- assign source_path = page.path | remove_first: "arenas/" -%}
+{%- capture edit_url %}https://github.com/joshtracey/traceyfamily/edit/main/arenas/{{ source_path }}{% endcapture -%}
+{%- capture edit_icon %}<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>{% endcapture -%}
+
+<a class="back" href="/arenas/">&larr; All arenas</a>
+<h1>{{ rink_name }}</h1>
+<p class="where">{% if rink_city == "" or rink_city == "Unknown" %}<span class="unknown">City unknown</span>{% else %}{{ rink_city }}{% endif %}</p>
+
+<div class="meta">
+  <div class="updated">
+    <small>Last updated</small>
+    <strong>{% if rink_updated == "" or rink_updated == "Unknown" %}<span class="unknown">Unknown</span>{% else %}{{ page.last_updated | date: "%b %-d, %Y" }}{% endif %}</strong>
+  </div>
+  <a class="btn" href="{{ edit_url }}">{{ edit_icon }} Edit this page</a>
+</div>
+
+<div class="facts">
+  <section class="fact-group">
+    <h2>Arena stream</h2>
+    <dl>
+      <div class="fact"><dt>Provider</dt><dd>{% include badge.html value=page.arena_stream kind="stream" %}</dd></div>
+      <div class="fact"><dt>Link</dt><dd>
+        {%- if stream_link != "" and stream_link != "Unknown" -%}
+          <a href="{{ stream_link }}" target="_blank" rel="noopener">Open stream &#8599;</a>
+        {%- elsif stream_kind == "none" -%}
+          <span class="unknown">N/A</span>
+        {%- else -%}
+          <span class="unknown">Unknown</span>
+        {%- endif -%}
+      </dd></div>
+    </dl>
+  </section>
+
+  <section class="fact-group">
+    <h2>Cell reception</h2>
+    <dl>
+      <div class="fact"><dt>Bell / Telus<small>incl. Virgin, Koodo</small></dt><dd>{% include badge.html value=page.cell_bell_telus kind="reception" %}</dd></div>
+      <div class="fact"><dt>Rogers<small>incl. Fido, Chatr</small></dt><dd>{% include badge.html value=page.cell_rogers kind="reception" %}</dd></div>
+    </dl>
+  </section>
+
+  <section class="fact-group">
+    <h2>WiFi</h2>
+    <dl>
+      <div class="fact"><dt>WiFi available</dt><dd>{% include badge.html value=page.wifi kind="yes_good" %}</dd></div>
+      <div class="fact"><dt>Captive portal<small>welcome/accept page to click through</small></dt><dd>{% include badge.html value=page.captive_portal kind="yes_meh" %}</dd></div>
+      <div class="fact"><dt>Blocks streaming<small>blocks or kills video streams</small></dt><dd>{% include badge.html value=page.blocks_streaming kind="yes_bad" %}</dd></div>
+    </dl>
+  </section>
+
+  <section class="fact-group">
+    <h2>Ethernet</h2>
+    <dl>
+      <div class="fact"><dt>Ethernet port</dt><dd>{% include badge.html value=page.ethernet kind="yes_good" %}</dd></div>
+      <div class="fact text"><dt>Where it is</dt><dd>{% if eth_location == "" or eth_location == "Unknown" %}<span class="unknown">Unknown</span>{% else %}{{ eth_location | escape }}{% endif %}</dd></div>
+    </dl>
+  </section>
+
+  <section class="fact-group">
+    <h2>Rink</h2>
+    <dl>
+      <div class="fact text"><dt>Address</dt><dd>
+        {%- if rink_address == "" or rink_address == "Unknown" -%}
+          <span class="unknown">Unknown</span>
+        {%- else -%}
+          {%- capture map_query %}{{ rink_address }}{% if rink_city != "" %}, {{ rink_city }}{% endif %}{% endcapture -%}
+          <a href="https://www.google.com/maps/search/?api=1&amp;query={{ map_query | url_encode }}" target="_blank" rel="noopener">{{ rink_address | escape }}</a>
+        {%- endif -%}
+      </dd></div>
+      <div class="fact text"><dt>Best camera spot</dt><dd>{% if camera_spot == "" or camera_spot == "Unknown" %}<span class="unknown">Unknown</span>{% else %}{{ camera_spot | escape }}{% endif %}</dd></div>
+    </dl>
+  </section>
+</div>
+
+<h2 class="section-title">Tips</h2>
+{%- assign tip_text = content | strip_html | strip -%}
+{%- if tip_text == "" and content contains "<img" -%}{%- assign tip_text = "photo" -%}{%- endif -%}
+{%- if tip_text == "" %}
+<p class="unknown">No tips yet. Know this rink? Tap Edit this page to add some.</p>
+{%- else %}
+<div class="prose">
+{{ content }}
+</div>
+{%- endif %}
+
+<div class="page-foot">
+  <a class="btn ghost" href="{{ edit_url }}">{{ edit_icon }} Edit this page</a>
+  <p>Editing needs a free GitHub account. Saved changes go live in a minute or two.</p>
+</div>

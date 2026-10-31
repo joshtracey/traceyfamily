@@ -1,0 +1,109 @@
+---
+layout: arenas-base
+title: Arena Streaming Guide
+---
+{%- capture new_arena_template %}{% include arena-template.md %}{% endcapture -%}
+{%- assign rinks = site.rinks | sort_natural: "name" -%}
+
+<h1>Arena <span>Streaming</span> Guide</h1>
+<p class="lede">What works for livestreaming at rinks around southern New Brunswick: arena streams, cell reception, WiFi quirks and Ethernet. Written and kept up to date by hockey parents.</p>
+
+<div class="actions">
+  <a class="btn" id="add-arena" href="https://github.com/joshtracey/traceyfamily/new/main/arenas/_rinks?filename=new-arena.md&amp;value={{ new_arena_template | url_encode | replace: '+', '%20' }}">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+    Add an arena
+  </a>
+  <a class="btn ghost" href="/arenas/tips/">General tips</a>
+</div>
+<p class="hint">Editing needs a free GitHub account. Saved changes go live in a minute or two.</p>
+
+<div class="search" id="search" hidden>
+  <input type="search" id="rink-search" placeholder="Search by arena or city" autocomplete="off" aria-label="Search by arena or city" />
+</div>
+
+<p class="count" id="rink-count">{{ rinks.size }} arenas</p>
+<ul class="rinks">
+  {%- for rink in rinks %}
+  {%- assign rink_name = rink.name | default: rink.title -%}
+  {%- assign rink_city = rink.city | append: "" | strip -%}
+  {%- assign rink_updated = rink.last_updated | append: "" | strip -%}
+  {%- assign bt = rink.cell_bell_telus | append: "" | strip | downcase -%}
+  {%- assign rg = rink.cell_rogers | append: "" | strip | downcase -%}
+  {%- if bt == "" %}{% assign bt = "unknown" %}{% endif -%}
+  {%- if rg == "" %}{% assign rg = "unknown" %}{% endif -%}
+  {%- assign wifi = rink.wifi | append: "" | strip | downcase -%}
+  {%- assign blocks = rink.blocks_streaming | append: "" | strip | downcase -%}
+  {%- assign portal = rink.captive_portal | append: "" | strip | downcase %}
+  <li class="rink" data-search="{{ rink_name | escape }} {{ rink_city | escape }}">
+    <a href="{{ rink.url }}">
+      <div class="rink-name">{{ rink_name }}</div>
+      <div class="rink-meta">
+        {%- if rink_city == "" or rink_city == "Unknown" %}<span class="unknown">City unknown</span>{% else %}{{ rink_city }}{% endif %}
+        &middot; Updated {% if rink_updated == "" or rink_updated == "Unknown" %}<span class="unknown">Unknown</span>{% else %}{{ rink.last_updated | date: "%b %-d, %Y" }}{% endif -%}
+      </div>
+      <div class="badges">
+        {% include badge.html value=rink.arena_stream kind="stream" k="Arena stream" %}
+        {% if bt == rg -%}
+          {% include badge.html value=rink.cell_bell_telus kind="reception" k="Cell" %}
+        {%- else -%}
+          {% include badge.html value=rink.cell_bell_telus kind="reception" k="Bell/Telus" %}
+          {% include badge.html value=rink.cell_rogers kind="reception" k="Rogers" %}
+        {%- endif %}
+        {% comment %} The WiFi badge sums up the WiFi fields: a network that kills streams isn't good news. {% endcomment -%}
+        {% if wifi == "yes" or wifi == "true" -%}
+          {% if blocks == "yes" or blocks == "true" -%}
+            <span class="badge tone-bad"><span class="badge-k">WiFi</span> Blocks streams</span>
+          {%- elsif blocks == "partial" -%}
+            <span class="badge tone-warn"><span class="badge-k">WiFi</span> Partly blocks streams</span>
+          {%- elsif portal == "yes" or portal == "true" -%}
+            <span class="badge tone-fair"><span class="badge-k">WiFi</span> Captive portal</span>
+          {%- else -%}
+            {% include badge.html value=rink.wifi kind="yes_good" k="WiFi" %}
+          {%- endif %}
+        {%- else -%}
+          {% include badge.html value=rink.wifi kind="yes_good" k="WiFi" %}
+        {%- endif %}
+        {% include badge.html value=rink.ethernet kind="yes_good" k="Ethernet" %}
+      </div>
+    </a>
+  </li>
+  {%- endfor %}
+</ul>
+<p class="empty" id="rink-empty" hidden>No arena matches that search. Not listed? Use Add an arena above.</p>
+
+<script>
+  (function () {
+    var total = {{ rinks.size }};
+    var input = document.getElementById('rink-search');
+    var count = document.getElementById('rink-count');
+    var empty = document.getElementById('rink-empty');
+    var rows = Array.prototype.slice.call(document.querySelectorAll('.rink'));
+
+    // Lowercase, drop accents and punctuation, so "st stephen" finds "St. Stephen".
+    function norm(s) {
+      return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+        .replace(/[^a-z0-9]+/g, ' ').trim();
+    }
+
+    rows.forEach(function (row) { row.searchText = norm(row.getAttribute('data-search')); });
+    document.getElementById('search').hidden = false;
+
+    input.addEventListener('input', function () {
+      var words = norm(input.value).split(' ').filter(Boolean);
+      var shown = 0;
+      rows.forEach(function (row) {
+        var match = words.every(function (w) { return row.searchText.indexOf(w) !== -1; });
+        row.hidden = !match;
+        if (match) shown++;
+      });
+      count.textContent = words.length ? shown + ' of ' + total + ' arenas' : total + ' arenas';
+      empty.hidden = shown > 0;
+    });
+
+    // Pre-fill today's date in the new arena template.
+    var add = document.getElementById('add-arena');
+    var d = new Date();
+    var today = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+    add.href = add.href.replace('last_updated%3A%0A', 'last_updated%3A%20' + today + '%0A');
+  })();
+</script>

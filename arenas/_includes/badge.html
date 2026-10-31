@@ -1,0 +1,50 @@
+{%- comment -%}
+  A coloured badge for one arena field.
+    value: the raw front matter value
+    kind:  how to colour it
+           reception - None / Poor / OK / Good
+           yes_good  - Yes is good news (WiFi, Ethernet)
+           yes_meh   - Yes is a hassle (captive portal)
+           yes_bad   - Yes is bad news (blocks streaming)
+           stream    - LiveBarn / Hudl / Other / None
+    k:     optional short label shown before the value
+  YAML reads unquoted Yes/No as true/false, so both spellings land here.
+  Blank and Unknown both show as a muted "Unknown".
+{%- endcomment -%}
+{%- assign badge_raw = include.value | append: "" | strip -%}
+{%- assign badge_v = badge_raw | downcase -%}
+{%- if badge_v == "true" -%}{%- assign badge_v = "yes" -%}{%- elsif badge_v == "false" -%}{%- assign badge_v = "no" -%}{%- endif -%}
+{%- assign badge_label = badge_raw -%}
+{%- assign badge_tone = "neutral" -%}
+{%- case badge_v -%}
+  {%- when "", "unknown", "?" -%}
+    {%- assign badge_label = "Unknown" -%}{%- assign badge_tone = "unknown" -%}
+  {%- when "n/a", "na" -%}
+    {%- assign badge_label = "N/A" -%}{%- assign badge_tone = "unknown" -%}
+  {%- when "yes" -%}
+    {%- assign badge_label = "Yes" -%}
+    {%- if include.kind == "yes_good" -%}{%- assign badge_tone = "good" -%}
+    {%- elsif include.kind == "yes_meh" -%}{%- assign badge_tone = "fair" -%}
+    {%- elsif include.kind == "yes_bad" -%}{%- assign badge_tone = "bad" -%}{%- endif -%}
+  {%- when "no" -%}
+    {%- assign badge_label = "No" -%}
+    {%- if include.kind == "yes_meh" or include.kind == "yes_bad" -%}{%- assign badge_tone = "good" -%}{%- endif -%}
+  {%- when "partial" -%}
+    {%- assign badge_label = "Partial" -%}{%- assign badge_tone = "warn" -%}
+  {%- when "none" -%}
+    {%- assign badge_label = "None" -%}
+    {%- if include.kind == "reception" -%}{%- assign badge_tone = "bad" -%}{%- endif -%}
+  {%- when "poor" -%}
+    {%- assign badge_label = "Poor" -%}{%- assign badge_tone = "warn" -%}
+  {%- when "ok" -%}
+    {%- assign badge_label = "OK" -%}{%- assign badge_tone = "fair" -%}
+  {%- when "good" -%}
+    {%- assign badge_label = "Good" -%}{%- assign badge_tone = "good" -%}
+  {%- when "livebarn" -%}
+    {%- assign badge_label = "LiveBarn" -%}{%- assign badge_tone = "good" -%}
+  {%- when "hudl" -%}
+    {%- assign badge_label = "Hudl" -%}{%- assign badge_tone = "good" -%}
+  {%- when "other" -%}
+    {%- assign badge_label = "Other" -%}{%- assign badge_tone = "good" -%}
+{%- endcase -%}
+<span class="badge tone-{{ badge_tone }}">{% if include.k %}<span class="badge-k">{{ include.k }}</span> {% endif %}{{ badge_label | escape }}</span>

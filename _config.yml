@@ -1,0 +1,21 @@
+# Jekyll only drives the /arenas section. The root index.html has no front
+# matter, so GitHub Pages serves it untouched.
+collections_dir: arenas
+layouts_dir: arenas/_layouts
+includes_dir: arenas/_includes
+
+collections:
+  rinks:
+    output: true
+    permalink: /arenas/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: rinks
+    values:
+      layout: arena
+
+markdown: kramdown
+kramdown:
+  input: GFM
