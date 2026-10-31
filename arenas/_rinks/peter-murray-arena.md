@@ -12,15 +12,15 @@
 name: Peter Murray Arena
 city: Saint John
 address: 711 Dever Rd
-arena_stream: Unknown
+arena_stream: None
 arena_stream_link:
-cell_bell_telus: Unknown
+cell_bell_telus: OK
 cell_rogers: Unknown
-wifi: Unknown
-captive_portal: Unknown
+wifi: No
+captive_portal: N/A
 blocks_streaming: Unknown
-ethernet: Unknown
+ethernet: No
 ethernet_location:
-best_camera_spot:
-last_updated: 2026-10-30
+best_camera_spot: Tunnel at centre ice
+last_updated: 2026-10-31
 ---
