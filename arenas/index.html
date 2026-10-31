@@ -2,28 +2,20 @@
 layout: arenas-base
 title: Arena Streaming Guide
 ---
-{%- capture new_arena_template %}{% include arena-template.md %}{% endcapture -%}
+{%- comment -%}
+  Rinks nobody has written notes for stay off this list. They wait on the
+  Add an arena page, so the next parent fills one in instead of starting a duplicate.
+{%- endcomment -%}
 {%- assign rinks = site.rinks | sort_natural: "name" -%}
-
-<h1>Arena <span>Streaming</span> Guide</h1>
-<p class="lede">What works for livestreaming at rinks around southern New Brunswick: arena streams, cell reception, WiFi quirks and Ethernet. Written and kept up to date by hockey parents.</p>
-
-<div class="actions">
-  <a class="btn" id="add-arena" href="https://github.com/joshtracey/traceyfamily/new/main/arenas/_rinks?filename=new-arena.md&amp;value={{ new_arena_template | url_encode | replace: '+', '%20' }}">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-    Add an arena
-  </a>
-  <a class="btn ghost" href="/arenas/tips/">General tips</a>
-</div>
-<p class="hint">Editing needs a free GitHub account. Saved changes go live in a minute or two.</p>
-
-<div class="search" id="search" hidden>
-  <input type="search" id="rink-search" placeholder="Search by arena or city" autocomplete="off" aria-label="Search by arena or city" />
-</div>
-
-<p class="count" id="rink-count">{{ rinks.size }} arenas</p>
-<ul class="rinks">
+{%- assign shown_count = 0 -%}
+{%- assign waiting_count = 0 -%}
+{%- capture rink_rows -%}
   {%- for rink in rinks %}
+  {%- include rink-status.html rink=rink -%}
+  {%- unless rink_has_notes -%}
+    {%- assign waiting_count = waiting_count | plus: 1 -%}
+  {%- else -%}
+  {%- assign shown_count = shown_count | plus: 1 -%}
   {%- assign rink_name = rink.name | default: rink.title -%}
   {%- assign rink_city = rink.city | append: "" | strip -%}
   {%- assign rink_updated = rink.last_updated | append: "" | strip -%}
@@ -67,16 +59,41 @@ title: Arena Streaming Guide
       </div>
     </a>
   </li>
+  {%- endunless -%}
   {%- endfor %}
+{%- endcapture -%}
+
+<h1>Arena <span>Streaming</span> Guide</h1>
+<p class="lede">What works for livestreaming at rinks around southern New Brunswick: arena streams, cell reception, WiFi quirks and Ethernet. Written and kept up to date by hockey parents.</p>
+
+<div class="actions">
+  <a class="btn" href="/arenas/add/">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+    Add an arena
+  </a>
+  <a class="btn ghost" href="/arenas/tips/">General tips</a>
+</div>
+<p class="hint">Editing needs a free GitHub account. Saved changes go live in a minute or two.</p>
+
+<div class="search" id="search" hidden>
+  <input type="search" id="rink-search" placeholder="Search by arena or city" autocomplete="off" aria-label="Search by arena or city" />
+</div>
+
+<p class="count" id="rink-count">{{ shown_count }} arenas</p>
+<ul class="rinks">{{ rink_rows }}
 </ul>
-<p class="empty" id="rink-empty" hidden>No arena matches that search. Not listed? Use Add an arena above.</p>
+<p class="empty" id="rink-empty" hidden>No arena with notes matches that search. <a id="rink-empty-add" href="/arenas/add/">Check the rinks waiting for notes</a>, or add a new one.</p>
+{%- if waiting_count > 0 %}
+<p class="waiting-note">{{ waiting_count }} more rinks have a page but no notes yet, so they're not shown here. <a href="/arenas/add/">Add an arena</a> lists them.</p>
+{%- endif %}
 
 <script>
   (function () {
-    var total = {{ rinks.size }};
+    var total = {{ shown_count }};
     var input = document.getElementById('rink-search');
     var count = document.getElementById('rink-count');
     var empty = document.getElementById('rink-empty');
+    var emptyAdd = document.getElementById('rink-empty-add');
     var rows = Array.prototype.slice.call(document.querySelectorAll('.rink'));
 
     // Lowercase, drop accents and punctuation, so "st stephen" finds "St. Stephen".
@@ -98,12 +115,8 @@ title: Arena Streaming Guide
       });
       count.textContent = words.length ? shown + ' of ' + total + ' arenas' : total + ' arenas';
       empty.hidden = shown > 0;
+      // Carry the search over, so the add page starts out matching it.
+      emptyAdd.href = '/arenas/add/?q=' + encodeURIComponent(input.value.trim());
     });
-
-    // Pre-fill today's date in the new arena template.
-    var add = document.getElementById('add-arena');
-    var d = new Date();
-    var today = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
-    add.href = add.href.replace('last_updated%3A%0A', 'last_updated%3A%20' + today + '%0A');
   })();
 </script>

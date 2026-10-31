@@ -24,5 +24,3 @@ ethernet_location:
 best_camera_spot:
 last_updated: 2026-10-30
 ---
-
-Home of the Mount Allison women's team.

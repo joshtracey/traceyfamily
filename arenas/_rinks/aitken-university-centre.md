@@ -24,5 +24,3 @@ ethernet_location:
 best_camera_spot:
 last_updated: 2026-10-30
 ---
-
-UNB campus. Home of the UNB Reds.

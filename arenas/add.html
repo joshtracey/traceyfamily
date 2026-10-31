@@ -1,0 +1,137 @@
+---
+layout: arenas-base
+title: Add an arena
+permalink: /arenas/add/
+---
+{%- comment -%}
+  Lists the rinks that have a page but no notes yet, so a parent adds to one of
+  those before starting a new page. Searching also matches rinks already in
+  the guide, to head off duplicates.
+{%- endcomment -%}
+{%- capture new_arena_template %}{% include arena-template.md %}{% endcapture -%}
+{%- assign rinks = site.rinks | sort_natural: "name" -%}
+{%- assign waiting_count = 0 -%}
+{%- capture edit_icon %}<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>{% endcapture -%}
+{%- capture rink_rows -%}
+  {%- for rink in rinks %}
+  {%- include rink-status.html rink=rink -%}
+  {%- assign rink_name = rink.name | default: rink.title -%}
+  {%- assign rink_city = rink.city | append: "" | strip -%}
+  {%- assign rink_address = rink.address | append: "" | strip -%}
+  {%- unless rink_has_notes %}{% assign waiting_count = waiting_count | plus: 1 %}{% endunless %}
+  <li class="rink" data-search="{{ rink_name | escape }} {{ rink_city | escape }}"{% if rink_has_notes %} data-has-notes hidden{% endif %}>
+    <a href="{% if rink_has_notes %}{{ rink.url }}{% else %}{{ rink_edit_url }}{% endif %}">
+      <div class="rink-name">{{ rink_name }}</div>
+      <div class="rink-meta">
+        {%- if rink_city == "" or rink_city == "Unknown" %}<span class="unknown">City unknown</span>{% else %}{{ rink_city }}{% endif %}
+        {%- if rink_address != "" and rink_address != "Unknown" %} &middot; {{ rink_address | escape }}{% endif -%}
+      </div>
+      <div class="badges">
+        {%- if rink_has_notes %}
+        <span class="badge tone-good">Already in the guide</span>
+        {%- else %}
+        <span class="badge tone-fair">{{ edit_icon }} Add notes</span>
+        {%- endif %}
+      </div>
+    </a>
+  </li>
+  {%- endfor %}
+{%- endcapture -%}
+
+<a class="back" href="/arenas/">&larr; All arenas</a>
+<h1>Add an <span>arena</span></h1>
+<p class="lede">Search for the rink first. Many already have a page that's waiting for someone to add notes. If yours is here, add to that page instead of starting a new one.</p>
+
+<div class="search" id="search" hidden>
+  <input type="search" id="add-search" placeholder="Arena name or town" autocomplete="off" aria-label="Arena name or town" />
+</div>
+
+<p class="count" id="add-count">{{ waiting_count }} rinks waiting for notes</p>
+<ul class="rinks" id="add-list">{{ rink_rows }}
+</ul>
+<p class="empty" id="add-empty" hidden>No rink matches that search. Create a new page for it below.</p>
+
+<section class="new-arena">
+  <h2 class="section-title">Not listed?</h2>
+  <p>Start a new page for the rink. Fill in what you know and leave the rest as Unknown.</p>
+  <div class="actions">
+    <a class="btn" id="new-arena" href="https://github.com/joshtracey/traceyfamily/new/main/arenas/_rinks?filename=new-arena.md&amp;value={{ new_arena_template | url_encode | replace: '+', '%20' }}">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+      Create a new arena page
+    </a>
+  </div>
+  <p class="hint" id="new-arena-name" hidden></p>
+  <p class="hint">Editing needs a free GitHub account. Saved changes go live in a minute or two.</p>
+</section>
+
+<script>
+  (function () {
+    var input = document.getElementById('add-search');
+    var count = document.getElementById('add-count');
+    var empty = document.getElementById('add-empty');
+    var create = document.getElementById('new-arena');
+    var createName = document.getElementById('new-arena-name');
+    var rows = Array.prototype.slice.call(document.querySelectorAll('.rink'));
+    var waiting = {{ waiting_count }};
+
+    // Lowercase, drop accents and punctuation, so "saint stephen" finds "St. Stephen".
+    function norm(s) {
+      return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+        .replace(/[^a-z0-9]+/g, ' ').replace(/\bsaint\b/g, 'st').trim();
+    }
+
+    // Words that don't tell rinks apart. Matching without them means
+    // "Harvey arena" still finds Grant-Harvey Centre.
+    var generic = ['arena', 'arenas', 'rink', 'rinks', 'centre', 'center', 'civic', 'memorial',
+      'community', 'sports', 'complex', 'the', 'of'];
+
+    // Pre-fill today's date in the new arena template.
+    var d = new Date();
+    var today = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+    var baseHref = create.href.replace('last_updated%3A%0A', 'last_updated%3A%20' + today + '%0A');
+    create.href = baseHref;
+
+    rows.forEach(function (row) {
+      row.searchText = norm(row.getAttribute('data-search'));
+      row.hasNotes = row.hasAttribute('data-has-notes');
+    });
+    document.getElementById('search').hidden = false;
+
+    function update() {
+      var typed = input.value.trim();
+      var words = norm(typed).split(' ').filter(Boolean);
+      var keys = words.filter(function (w) { return generic.indexOf(w) === -1; });
+      if (!keys.length) keys = words;
+      var shown = 0;
+      rows.forEach(function (row) {
+        // With no search, show only the rinks waiting for notes.
+        var match = words.length
+          ? keys.every(function (w) { return row.searchText.indexOf(w) !== -1; })
+          : !row.hasNotes;
+        row.hidden = !match;
+        if (match) shown++;
+      });
+      count.textContent = words.length
+        ? (shown === 1 ? '1 match' : shown + ' matches')
+        : waiting + ' rinks waiting for notes';
+      empty.hidden = shown > 0;
+
+      // Name the new page after the search, quoted so YAML takes it as plain text.
+      if (words.length) {
+        var yamlName = '"' + typed.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"';
+        create.href = baseHref
+          .replace('filename=new-arena.md', 'filename=' + words.join('-') + '.md')
+          .replace('%0Aname%3A%0A', '%0A' + encodeURIComponent('name: ' + yamlName + '\n'));
+        createName.textContent = 'The new page starts with the name “' + typed + '”. You can change it in the editor.';
+        createName.hidden = false;
+      } else {
+        create.href = baseHref;
+        createName.hidden = true;
+      }
+    }
+
+    input.addEventListener('input', update);
+    var q = new URLSearchParams(location.search).get('q');
+    if (q) { input.value = q; update(); }
+  })();
+</script>

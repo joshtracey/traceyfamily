@@ -9,9 +9,8 @@ layout: arenas-base
 {%- assign stream_kind = page.arena_stream | append: "" | strip | downcase -%}
 {%- assign eth_location = page.ethernet_location | append: "" | strip -%}
 {%- assign camera_spot = page.best_camera_spot | append: "" | strip -%}
-{%- comment -%} Jekyll 3 leaves collections_dir off page.path for collection files, so add it back. {%- endcomment -%}
-{%- assign source_path = page.path | remove_first: "arenas/" -%}
-{%- capture edit_url %}https://github.com/joshtracey/traceyfamily/edit/main/arenas/{{ source_path }}{% endcapture -%}
+{%- include rink-status.html rink=page -%}
+{%- assign edit_url = rink_edit_url -%}
 {%- capture edit_icon %}<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>{% endcapture -%}
 
 <a class="back" href="/arenas/">&larr; All arenas</a>

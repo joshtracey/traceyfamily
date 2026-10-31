@@ -24,5 +24,3 @@ ethernet_location:
 best_camera_spot:
 last_updated: 2026-10-30
 ---
-
-Mostly an event venue. The ice is rented for hockey and ringette when no show is booked.
