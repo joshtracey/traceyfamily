@@ -12,15 +12,20 @@
 name: Lord Beaverbrook Rink
 city: Saint John
 address: 536 Main St
-arena_stream: Unknown
+arena_stream: LiveBarn
 arena_stream_link:
-cell_bell_telus: Unknown
+cell_bell_telus: OK
 cell_rogers: Unknown
-wifi: Unknown
+wifi: Yes
 captive_portal: Unknown
-blocks_streaming: Unknown
+blocks_streaming: No
 ethernet: Unknown
 ethernet_location:
 best_camera_spot:
-last_updated: 2026-10-30
+last_updated: 2026-11-01
 ---
+
+Added by joshtracey · Nov 1, 2026
+{: .tip-by}
+
+Wifi: secondlovegolf.ca, password GuestLBR
