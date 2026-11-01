@@ -19,3 +19,7 @@ defaults:
 markdown: kramdown
 kramdown:
   input: GFM
+
+# Notes for Claude Code, not a page on the site.
+exclude:
+  - CLAUDE.md
