@@ -12,15 +12,15 @@
 name: 8th Hussars Sports Centre
 city: Sussex
 address: 8 Leonard Dr
-arena_stream: Unknown
+arena_stream: None
 arena_stream_link:
-cell_bell_telus: Unknown
+cell_bell_telus: Poor
 cell_rogers: Unknown
-wifi: Unknown
-captive_portal: Unknown
-blocks_streaming: Unknown
-ethernet: Unknown
+wifi: Yes
+captive_portal: No
+blocks_streaming: Yes
+ethernet: No
 ethernet_location:
 best_camera_spot:
-last_updated: 2026-10-30
+last_updated: 2026-11-20
 ---
