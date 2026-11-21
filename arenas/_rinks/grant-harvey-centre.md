@@ -14,13 +14,13 @@ city: Fredericton
 address: 600 Knowledge Park Dr
 arena_stream: Unknown
 arena_stream_link:
-cell_bell_telus: Unknown
+cell_bell_telus: Good
 cell_rogers: Unknown
-wifi: Unknown
-captive_portal: Unknown
+wifi: Yes
+captive_portal: Yes
 blocks_streaming: Unknown
 ethernet: Unknown
 ethernet_location:
 best_camera_spot:
-last_updated: 2026-10-30
+last_updated: 2026-11-21
 ---
