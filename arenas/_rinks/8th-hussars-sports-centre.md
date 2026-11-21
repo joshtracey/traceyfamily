@@ -14,13 +14,13 @@ city: Sussex
 address: 8 Leonard Dr
 arena_stream: None
 arena_stream_link:
-cell_bell_telus: Poor
+cell_bell_telus: OK
 cell_rogers: Unknown
 wifi: Yes
 captive_portal: No
 blocks_streaming: Yes
 ethernet: No
 ethernet_location:
-best_camera_spot:
-last_updated: 2026-11-20
+best_camera_spot: Centre ice on players bench side. Phone up against exterior wall
+last_updated: 2026-11-21
 ---
